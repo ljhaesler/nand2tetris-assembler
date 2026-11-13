@@ -63,6 +63,6 @@ class Parser:
         if ";" in self.currentcommand:
             return self.currentcommand[self.currentcommand.find(';')+1:]
 
-        logging.error('Unfound JUMP mnemonic, returning string "null"')
+        logging.info('Unfound JUMP mnemonic, returning string "null"')
         return "null"
 
