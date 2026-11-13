@@ -11,23 +11,33 @@ class Parser:
     def __init__(self, filename):
         logging.info("Parsing file")
         with open(filename) as file:
-            self.commands = file.readlines()
+            self.commands = self._stripAllLines(file.readlines())
         logging.info(f'File contains {len(self.commands)} lines')
 
-    def _stripCommand(self, command):
-        return command.split("//")[0].strip()
+    def _stripAllLines(self, lines):
+        commands = []
+
+        for i in range(len(lines)):
+            command = lines[i].split("//")[0].strip()
+            if len(command) > 0:
+                commands.append(command)
+
+        if len(commands) > 0:
+            return commands
+
+        logging.error("No commands found in .asm file, exiting.")
+        exit()
 
     def hasMoreCommands(self):
         logging.info(f'File has {len(self.commands)} lines left')
 
-        for i in range(len(self.commands)):
-            if len(self._stripCommand(self.commands[i])) > 0:
-                return True
+        if len(self.commands) > 0:
+            return True
 
         return False;
 
     def advance(self):
-        self.currentcommand = self._stripCommand(self.commands.pop())
+        self.currentcommand = self.commands.pop()
 
     def commandType(self):
         if self.currentcommand.startswith('@'):
