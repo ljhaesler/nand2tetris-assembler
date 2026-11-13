@@ -36,6 +36,6 @@ while parser.hasMoreCommands():
 machine_code = "\n".join(hack)
 writeFileName = args.filename.removesuffix(".asm") + ".hack"
 
-with open(writeFileName, "w") as file:
+with open(f"machine_code/{writeFileName}", "w") as file:
     file.write(machine_code)
     file.write("\n")
