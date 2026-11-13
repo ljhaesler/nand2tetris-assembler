@@ -4,15 +4,15 @@ PREDEFINED_SYMBOLS = ["SP", "LCL", "ARG", "THIS", "THAT",
                       "SCREEN", "KBD"]
 
 import logging
-logging.basicConfig(level=logging.INFO, format='PARSER %(levelname)s: %(message)s')
+logger = logging.getLogger(__name__)
 
 
 class Parser:
     def __init__(self, filename):
-        logging.info("Parsing file")
+        logger.info("Parsing file")
         with open(filename) as file:
             self.commands = self._stripAllLines(file.readlines())
-        logging.info(f'File contains {len(self.commands)} lines')
+        logger.info(f'File contains {len(self.commands)} lines')
 
     def _stripAllLines(self, lines):
         commands = []
@@ -25,11 +25,11 @@ class Parser:
         if len(commands) > 0:
             return commands
 
-        logging.error("No commands found in .asm file, exiting.")
+        logger.error("No commands found in .asm file, exiting.")
         exit()
 
     def hasMoreCommands(self):
-        logging.info(f'File has {len(self.commands)} lines left')
+        logger.info(f'File has {len(self.commands)} lines left')
 
         if len(self.commands) > 0:
             return True
@@ -42,22 +42,22 @@ class Parser:
     def commandType(self):
         if self.currentcommand.startswith('@'):
             if self.currentcommand[1:].isdecimal():
-                logging.info('Command is parsed as A_COMMAND')
+                logger.info('Command is parsed as A_COMMAND')
                 return "A_COMMAND"
-            logging.info('Command is parsed as L_COMMAND')
+            logger.info('Command is parsed as L_COMMAND')
             return "L_COMMAND"
-        logging.info('Command is parsed as C_COMMAND')
+        logger.info('Command is parsed as C_COMMAND')
         return "C_COMMAND"
 
     def symbol(self):
-        logging.info(f'Current command symbol is {self.currentcommand[1:]}')
+        logger.info(f'Current command symbol is {self.currentcommand[1:]}')
         return self.currentcommand[1:]
 
     def dest(self):
         if "=" in self.currentcommand:
                 return self.currentcommand[:self.currentcommand.find('=')]
 
-        logging.info('Unfound DEST mnemonic, returning string "null"')
+        logger.info('Unfound DEST mnemonic, returning string "null"')
         return "null"
 
     def comp(self):
@@ -66,13 +66,13 @@ class Parser:
         if len(comp) > 0:
             return comp
 
-        logging.error('Invalid COMP mnemonic, exiting')
+        logger.error('Invalid COMP mnemonic, exiting')
         exit()
 
     def jump(self):
         if ";" in self.currentcommand:
             return self.currentcommand[self.currentcommand.find(';')+1:]
 
-        logging.info('Unfound JUMP mnemonic, returning string "null"')
+        logger.info('Unfound JUMP mnemonic, returning string "null"')
         return "null"
 

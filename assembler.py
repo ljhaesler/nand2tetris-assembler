@@ -1,4 +1,5 @@
 import argparse
+import logging
 import hack_parser
 import hack_code
 
@@ -7,9 +8,14 @@ argparser = argparse.ArgumentParser(
     description='Takes a .asm file and converts it into a .hack file')
 
 argparser.add_argument('filename')
+argparser.add_argument('-v', '--verbose', action='store_true',
+                       help='show INFO-level parsing details')
 
 args=argparser.parse_args()
 assert args.filename.endswith(".asm"), "Input file is not a .asm file"
+
+logging.basicConfig(level=logging.INFO if args.verbose else logging.WARNING,
+                    format='%(name)s %(levelname)s: %(message)s')
 
 
 parser = hack_parser.Parser(args.filename)
