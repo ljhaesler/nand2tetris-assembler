@@ -1,5 +1,6 @@
 import argparse
 import logging
+import os
 import hack_parser
 import hack_code
 
@@ -34,7 +35,7 @@ while parser.hasMoreCommands():
         hack.append("".join(c_instruction))
 
 machine_code = "\n".join(hack)
-writeFileName = args.filename.removesuffix(".asm") + ".hack"
+writeFileName = os.path.basename(args.filename).removesuffix(".asm") + ".hack"
 
 with open(f"machine_code/{writeFileName}", "w") as file:
     file.write(machine_code)

@@ -50,12 +50,14 @@ class Parser:
         return "C_COMMAND"
 
     def symbol(self):
-        logger.info(f'Current command symbol is {self.currentcommand[1:]}')
+        logger.info(f'SYMBOL: {self.currentcommand[1:]}')
         return self.currentcommand[1:]
 
     def dest(self):
         if "=" in self.currentcommand:
-                return self.currentcommand[:self.currentcommand.find('=')]
+            dest = self.currentcommand[:self.currentcommand.find('=')]
+            logger.info(f'DEST: {dest}')
+            return dest
 
         logger.info('Unfound DEST mnemonic, returning string "null"')
         return "null"
@@ -64,6 +66,7 @@ class Parser:
         comp = self.currentcommand.split('=')[-1].split(";")[0]
 
         if len(comp) > 0:
+            logger.info(f'COMP: {comp}')
             return comp
 
         logger.error('Invalid COMP mnemonic, exiting')
@@ -71,7 +74,9 @@ class Parser:
 
     def jump(self):
         if ";" in self.currentcommand:
-            return self.currentcommand[self.currentcommand.find(';')+1:]
+            jump = self.currentcommand[self.currentcommand.find(';')+1:]
+            logger.info(f'JUMP: {jump}')
+            return jump
 
         logger.info('Unfound JUMP mnemonic, returning string "null"')
         return "null"
