@@ -4,7 +4,7 @@ PREDEFINED_SYMBOLS = ["SP", "LCL", "ARG", "THIS", "THAT",
                       "SCREEN", "KBD"]
 
 import logging
-logging.basicConfig(level=logging.INFO, format='PARSER %(level)s: %(message)s')
+logging.basicConfig(level=logging.INFO, format='PARSER %(levelname)s: %(message)s')
 
 
 class Parser:
@@ -14,19 +14,20 @@ class Parser:
             self.commands = file.readlines()
         logging.info(f'File contains {len(self.commands)} lines')
 
+    def _stripCommand(self, command):
+        return command.split("//")[0].strip()
+
     def hasMoreCommands(self):
-        logging.info(f'File has {len(self.commands)} commands left')
-        return len(self.commands) > 0
+        logging.info(f'File has {len(self.commands)} lines left')
+
+        for i in range(len(self.commands)):
+            if len(self._stripCommand(self.commands[i])) > 0:
+                return True
+
+        return False;
 
     def advance(self):
-        while (True):
-            with_comments = self.commands.pop(0)
-            without_comments = with_comments[:with_comments.rfind('//')].strip()
-            if len(without_comments) > 0:
-                self.currentcommand = without_comments
-                break
-
-        logging.info(f'Command is: {self.currentcommand}')
+        self.currentcommand = self._stripCommand(self.commands.pop())
 
     def commandType(self):
         if self.currentcommand.startswith('@'):
@@ -50,14 +51,13 @@ class Parser:
         return "null"
 
     def comp(self):
-        if "=" in self.currentcommand:
-            equals_index = self.currentcommand.find('=')
-            if ";" in self.currentcommand:
-                return self.currentcommand[equals_index+1:self.currentcommand.find(';')]
-            return self.currentcommand[equals_index+1:]
+        comp = self.currentcommand.split('=')[-1].split(";")[0]
 
-        logging.error('Unfound COMP mnemonic, returning string "null"')
-        return "null"
+        if len(comp) == 1:
+            return comp
+
+        logging.error('Invalid COMP mnemonic, exiting')
+        exit()
 
     def jump(self):
         if ";" in self.currentcommand:

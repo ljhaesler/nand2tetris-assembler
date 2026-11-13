@@ -13,9 +13,9 @@ COMP = {"0": "0101010",
         "D+1": "0011111",
         "A+1": "0110111",
         "M+1": "1110111",
-        "D-1": "0011111",
-        "A-1": "0110111",
-        "M-1": "1110111",
+        "D-1": "0001110",
+        "A-1": "0110010",
+        "M-1": "1110010",
         "D+A": "0000010",
         "D+M": "1000010",
         "D-A": "0010011",
@@ -46,7 +46,7 @@ JUMP = {"null": "000",
         "JMP": "111"}
 
 import logging
-logging.basicConfig(level=logging.INFO, format='CODE %(level)s: %(message)s')
+logging.basicConfig(level=logging.INFO, format='CODE %(levelname)s: %(message)s')
 
 class Code:
     def __init__(self):
