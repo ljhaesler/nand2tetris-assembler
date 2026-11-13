@@ -42,11 +42,11 @@ class Parser:
     def commandType(self):
         if self.currentcommand.startswith('@'):
             if self.currentcommand[1:].isdecimal():
-                logger.info('Command is parsed as A_COMMAND')
+                logger.info(f'{self.currentcommand} is parsed as A_COMMAND')
                 return "A_COMMAND"
-            logger.info('Command is parsed as L_COMMAND')
+            logger.info(f'{self.currentcommand} is parsed as L_COMMAND')
             return "L_COMMAND"
-        logger.info('Command is parsed as C_COMMAND')
+        logger.info(f'{self.currentcommand} is parsed as C_COMMAND')
         return "C_COMMAND"
 
     def symbol(self):
