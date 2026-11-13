@@ -37,7 +37,7 @@ class Parser:
         return False;
 
     def advance(self):
-        self.currentcommand = self.commands.pop()
+        self.currentcommand = self.commands.pop(0)
 
     def commandType(self):
         if self.currentcommand.startswith('@'):
