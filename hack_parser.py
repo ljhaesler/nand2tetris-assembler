@@ -63,7 +63,7 @@ class Parser:
     def comp(self):
         comp = self.currentcommand.split('=')[-1].split(";")[0]
 
-        if len(comp) == 1:
+        if len(comp) > 0:
             return comp
 
         logging.error('Invalid COMP mnemonic, exiting')

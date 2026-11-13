@@ -32,3 +32,4 @@ writeFileName = args.filename.removesuffix(".asm") + ".hack"
 
 with open(writeFileName, "w") as file:
     file.write(machine_code)
+    file.write("\n")
