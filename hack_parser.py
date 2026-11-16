@@ -40,18 +40,21 @@ class Parser:
         self.currentcommand = self.commands.pop(0)
 
     def commandType(self):
+        command = "C_COMMAND"
         if self.currentcommand.startswith('@'):
-            if self.currentcommand[1:].isdecimal():
-                logger.info(f'{self.currentcommand} is parsed as A_COMMAND')
-                return "A_COMMAND"
-            logger.info(f'{self.currentcommand} is parsed as L_COMMAND')
-            return "L_COMMAND"
-        logger.info(f'{self.currentcommand} is parsed as C_COMMAND')
-        return "C_COMMAND"
+            command = "A_COMMAND"
+        if self.currentcommand.startswith('(') and self.currentcommand.endswith(')'):
+            command = "L_COMMAND"
+        logger.info(f'{self.currentcommand} is parsed as {command}')
+        return command
 
     def symbol(self):
-        logger.info(f'SYMBOL: {self.currentcommand[1:]}')
-        return self.currentcommand[1:]
+        if self.currentcommand.startswith('@'):
+            logger.info(f'SYMBOL: {self.currentcommand[1:]}')
+            return self.currentcommand[1:]
+        if self.currentcommand.startswith('(') and self.currentcommand.endswith(')'):
+            logger.info(f'SYMBOL: {self.currentcommand[1:-1]}')
+            return self.currentcommand[1:-1]
 
     def dest(self):
         if "=" in self.currentcommand:
@@ -59,7 +62,7 @@ class Parser:
             logger.info(f'DEST: {dest}')
             return dest
 
-        logger.info('Unfound DEST mnemonic, returning string "null"')
+        logger.info("DEST: null")
         return "null"
 
     def comp(self):
@@ -78,6 +81,6 @@ class Parser:
             logger.info(f'JUMP: {jump}')
             return jump
 
-        logger.info('Unfound JUMP mnemonic, returning string "null"')
+        logger.info("JUMP: null")
         return "null"
 
