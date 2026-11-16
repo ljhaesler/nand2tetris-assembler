@@ -77,6 +77,9 @@ while second_pass.hasMoreCommands():
 machine_code = "\n".join(hack)
 writeFileName = os.path.basename(args.filename).removesuffix(".asm") + ".hack"
 
-with open(f"machine_code/{writeFileName}", "w") as file:
+# output goes next to this script, regardless of where it's run from
+outputDir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "machine_code")
+os.makedirs(outputDir, exist_ok=True) # create the output directory if it's missing
+with open(os.path.join(outputDir, writeFileName), "w") as file:
     file.write(machine_code)
     file.write("\n")
