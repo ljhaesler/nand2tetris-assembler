@@ -21,6 +21,7 @@ logging.basicConfig(level=logging.INFO if args.verbose else logging.WARNING,
 
 first_pass = hack_parser.Parser(args.filename)
 second_pass = hack_parser.Parser(args.filename)
+
 code = hack_code.Code()
 hack = []
 symbolTable = hack_symbol.SymbolTable()
@@ -34,25 +35,13 @@ while first_pass.hasMoreCommands():
 
     if command == 'L_COMMAND':
         symbol = first_pass.symbol()
-        # we don't check to see if the symbol already exists:
-        # if it was added previously by an @value entry, we need to overwrite it
-        symbolTable.addEntry(symbol, ROM_address)
+        if symbolTable.contains(symbol):
+            continue # dont overwrite pre-defined symbols
 
+        symbolTable.addEntry(symbol, ROM_address)
         continue # don't increment ROM_address
 
     ROM_address += 1
-
-    if command == 'A_COMMAND':
-        symbol = first_pass.symbol()
-
-        if symbol.isdecimal():
-            continue
-
-        if symbolTable.contains(symbol):
-            continue
-
-        symbolTable.addEntry(symbol, RAM_address)
-        RAM_address += 1
 
 while second_pass.hasMoreCommands():
     second_pass.advance()
@@ -67,7 +56,11 @@ while second_pass.hasMoreCommands():
         if symbol.isdecimal():
             hack.append(format(int(symbol), "016b"))
         else:
+            if not symbolTable.contains(symbol):
+                symbolTable.addEntry(symbol, RAM_address)
+
             hack.append(format(int(symbolTable.getAddress(symbol)), "016b"))
+            RAM_address += 1
 
     elif command == 'C_COMMAND':
         c_instruction = ["111"]
