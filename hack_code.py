@@ -46,6 +46,7 @@ JUMP = {"null": "000",
         "JMP": "111"}
 
 import logging
+import sys
 logger = logging.getLogger(__name__)
 
 class Code:
@@ -57,19 +58,19 @@ class Code:
             return DEST[mnemonic]
 
         logger.error(f"Invalid DEST syntax: {mnemonic}")
-        exit()
+        sys.exit(1)
 
     def comp(self, mnemonic):
         if mnemonic in COMP:
             return COMP[mnemonic]
 
         logger.error(f"Invalid COMP syntax: {mnemonic}")
-        exit()
+        sys.exit(1)
 
     def jump(self, mnemonic):
         if mnemonic in JUMP:
             return JUMP[mnemonic]
 
         logger.error(f"Invalid JUMP syntax: {mnemonic}")
-        exit()
+        sys.exit(1)
 

@@ -1,4 +1,5 @@
 import logging
+import sys
 logger = logging.getLogger(__name__)
 
 
@@ -21,7 +22,7 @@ class Parser:
             return commands
 
         logger.error("No commands found in .asm file, exiting.")
-        exit()
+        sys.exit(1)
 
     def hasMoreCommands(self):
         logger.info(f'File has {len(self.commands)} lines left')
@@ -68,7 +69,7 @@ class Parser:
             return comp
 
         logger.error('Invalid COMP mnemonic, exiting')
-        exit()
+        sys.exit(1)
 
     def jump(self):
         if ";" in self.currentcommand:
