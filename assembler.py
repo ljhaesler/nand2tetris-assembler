@@ -58,9 +58,9 @@ while second_pass.hasMoreCommands():
         else:
             if not symbolTable.contains(symbol):
                 symbolTable.addEntry(symbol, RAM_address)
+                RAM_address += 1
 
             hack.append(format(int(symbolTable.getAddress(symbol)), "016b"))
-            RAM_address += 1
 
     elif command == 'C_COMMAND':
         c_instruction = ["111"]
