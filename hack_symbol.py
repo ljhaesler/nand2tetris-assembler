@@ -10,7 +10,7 @@ class SymbolTable:
                       "SCREEN": "16384", "KBD": "24576"}
 
     def addEntry(self, symbol, address):
-        self.table.setdefault(symbol, address)
+        self.table[symbol] = address
 
     def contains(self, string):
         return string in self.table

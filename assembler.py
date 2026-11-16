@@ -33,7 +33,9 @@ while first_pass.hasMoreCommands():
     command = first_pass.commandType()
 
     if command == 'L_COMMAND':
-        symbol = second_pass.symbol()
+        symbol = first_pass.symbol()
+        # we don't check to see if the symbol already exists:
+        # if it was added previously by an @value entry, we need to overwrite it
         symbolTable.addEntry(symbol, ROM_address)
 
         continue # don't increment ROM_address
@@ -41,14 +43,16 @@ while first_pass.hasMoreCommands():
     ROM_address += 1
 
     if command == 'A_COMMAND':
-        symbol = second_pass.symbol()
+        symbol = first_pass.symbol()
 
         if symbol.isdecimal():
             continue
 
-        else:
-            symbolTable.addEntry(symbol, RAM_address)
-            RAM_address += 1
+        if symbolTable.contains(symbol):
+            continue
+
+        symbolTable.addEntry(symbol, RAM_address)
+        RAM_address += 1
 
 while second_pass.hasMoreCommands():
     second_pass.advance()
