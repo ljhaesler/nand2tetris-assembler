@@ -1,6 +1,7 @@
 import argparse
 import logging
 import os
+import sys
 import hack_parser
 import hack_code
 import hack_symbol
@@ -18,6 +19,7 @@ assert args.filename.endswith(".asm"), "Input file is not a .asm file"
 
 logging.basicConfig(level=logging.INFO if args.verbose else logging.WARNING,
                     format='%(name)s %(levelname)s: %(message)s')
+logger = logging.getLogger("assembler")
 
 first_pass = hack_parser.Parser(args.filename)
 second_pass = hack_parser.Parser(args.filename)
@@ -36,7 +38,9 @@ while first_pass.hasMoreCommands():
     if command == 'L_COMMAND':
         symbol = first_pass.symbol()
         if symbolTable.contains(symbol):
-            continue # dont overwrite pre-defined symbols
+            # covers both a label defined twice and a label reusing a built-in name
+            logger.error(f"Duplicate label: ({symbol}) is already defined, exiting.")
+            sys.exit(1)
 
         symbolTable.addEntry(symbol, ROM_address)
         continue # don't increment ROM_address
